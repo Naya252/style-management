@@ -1,43 +1,81 @@
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { useMeta } from 'vue-meta'
+import { defineComponent, computed, ref } from 'vue'
 
 export default defineComponent({
-  components: {
-    // HelloWorld
-  },
-  data() {
-    return {
-      drawer: false,
-      group: true,
-      items: [
+  setup(){
+
+    let title = ref("")
+    if(localStorage.title) {
+      title.value = localStorage.title
+    }
+
+    useMeta(
+    computed(() => ({ title: title.value ?? 'Default' })))
+
+    const items =  [
         {
-          title: '1',
+          title: 'Metadata',
           value: 1,
           props: {
             prependIcon: 'mdi-home',
-            to: '/'
+            to: '/meta'
           }
         },
         {
-          title: '2',
+          title: 'Theme',
           value: 2,
           props: {
             prependIcon: 'mdi-home',
-            to: '/about'
+            to: '/theme'
           }
         }
-      ]
+      ];
+
+      console.log(title)
+
+      function changeTitle(val: string) {
+        console.log(val)
+        title.value = val
+        localStorage.title = val;
+    }
+
+      return {
+        title,
+        items,
+        changeTitle,
+      } 
+  },
+  head: {},
+  data() {
+    return {
+      drawer: true,
+      group: true,
+    }
+  },
+  methods: {
+  },
+  mounted() {
+  },
+  provide() {
+    return {
+      title: this.title,
+      changeTitle: this.changeTitle
     }
   },
   watch: {
     group: function () {
       this.drawer = true
-    }
+    },
   }
 })
 </script>
 
 <template>
+  <metainfo>
+    <template v-slot:title="{ content }">{{ content ? `${content}` : `SITE_NAME` }}</template>
+  </metainfo>
+
   <v-app>
     <v-app-bar color="primary" density="compact">
       <template v-slot:prepend>
@@ -52,13 +90,7 @@ export default defineComponent({
     </v-app-bar>
 
     <v-navigation-drawer v-model="drawer" disable-route-watcher disable-resize-watcher>
-      <v-list
-        nav
-        :items="items"
-        item-title="title"
-        item-value="value"
-        active-color="primary"
-      ></v-list>
+      <v-list nav :items="items" item-title="title" item-value="value" color="primary"></v-list>
     </v-navigation-drawer>
 
     <v-main>

@@ -11,6 +11,8 @@ import '@mdi/font/css/materialdesignicons.css'
 import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
+import { createMetaManager } from 'vue-meta'
+
 const vuetify = createVuetify({
   components,
   directives,
@@ -39,5 +41,6 @@ const app = createApp(App)
 
 app.use(router)
 app.use(vuetify)
+app.use(createMetaManager())
 
 app.mount('#app')
