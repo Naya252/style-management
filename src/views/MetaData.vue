@@ -1,5 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref, inject } from 'vue'
+
 export default defineComponent({
   setup(){
     let title = inject('title')
@@ -23,11 +24,15 @@ export default defineComponent({
   },
   data() {
     return {
+      quete: ''
     }
+  },
+  created() {
   },
   computed: {
   },
   methods: {
+
     
   }
 })
@@ -58,7 +63,8 @@ export default defineComponent({
       </v-col>
 
       <v-col xs="12" sm="6">
-        <v-card title="Favicon"> </v-card>
+        <v-card title="Favicon">
+          <div id="quote" v-html="quete"></div>  </v-card>
       </v-col>
     </v-row>
   </v-container>

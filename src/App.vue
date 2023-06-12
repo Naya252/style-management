@@ -2,16 +2,23 @@
 import { useMeta } from 'vue-meta'
 import { defineComponent, computed, ref } from 'vue'
 
+import { getTitle, setTitle } from './repositories/api'
+import { createChanellTitle, useChannelTitle } from './services/styleManagementService'
+
 export default defineComponent({
   setup(){
 
-    let title = ref("")
-    if(localStorage.title) {
-      title.value = localStorage.title
+    let title = ref("Title")
+    let savedTitle = getTitle();
+
+    if(savedTitle) {
+      title.value = savedTitle
     }
 
     useMeta(
     computed(() => ({ title: title.value ?? 'Default' })))
+
+    createChanellTitle()
 
     const items =  [
         {
@@ -32,12 +39,10 @@ export default defineComponent({
         }
       ];
 
-      console.log(title)
-
       function changeTitle(val: string) {
-        console.log(val)
-        title.value = val
-        localStorage.title = val;
+        title.value = val;
+        setTitle(val)
+        useChannelTitle(val)
     }
 
       return {
